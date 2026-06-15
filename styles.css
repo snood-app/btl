@@ -1,0 +1,417 @@
+:root {
+  color-scheme: light;
+  --bg: #f8fafc;
+  --panel: #ffffff;
+  --ink: #172033;
+  --muted: #64748b;
+  --line: #d9e2ec;
+  --brand: #0f766e;
+  --brand-ink: #ffffff;
+  --warn: #92400e;
+  --danger: #991b1b;
+  --ok: #166534;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  min-height: 100vh;
+}
+
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: calc(14px + env(safe-area-inset-top)) 16px 12px;
+  background: rgba(248, 250, 252, 0.96);
+  border-bottom: 1px solid var(--line);
+  backdrop-filter: blur(16px);
+}
+
+h1,
+h2,
+p {
+  margin: 0;
+}
+
+h1 {
+  font-size: 24px;
+  line-height: 1.05;
+  letter-spacing: 0;
+}
+
+h2 {
+  font-size: 22px;
+  line-height: 1.15;
+}
+
+.eyebrow {
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.iconButton,
+.closeButton,
+.actionButton {
+  min-height: 44px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel);
+  color: var(--ink);
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.iconButton {
+  padding: 0 14px;
+}
+
+.topActions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 6px;
+}
+
+.topActions .iconButton {
+  min-height: 38px;
+  padding: 0 9px;
+  font-size: 12px;
+}
+
+.primarySmall {
+  border-color: var(--brand);
+  background: var(--brand);
+  color: var(--brand-ink);
+}
+
+main {
+  padding: 14px 12px 28px;
+}
+
+.filters {
+  display: grid;
+  gap: 10px;
+}
+
+input,
+select,
+textarea {
+  width: 100%;
+  min-height: 44px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel);
+  color: var(--ink);
+  padding: 10px 12px;
+  font: inherit;
+}
+
+textarea {
+  min-height: 96px;
+  resize: vertical;
+}
+
+.filterGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin: 12px 0;
+}
+
+.stats div {
+  min-height: 58px;
+  padding: 9px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel);
+}
+
+.stats strong {
+  display: block;
+  font-size: 21px;
+  line-height: 1;
+}
+
+.stats span {
+  display: block;
+  margin-top: 5px;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.list {
+  display: grid;
+  gap: 9px;
+}
+
+.priorityPanel {
+  margin: 12px 0;
+  padding: 10px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel);
+}
+
+.sectionTitle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.sectionTitle h2 {
+  font-size: 17px;
+}
+
+.sectionTitle select {
+  width: 112px;
+}
+
+.overdueList {
+  display: grid;
+  gap: 7px;
+}
+
+.overdueItem {
+  display: grid;
+  gap: 4px;
+  padding: 8px;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+  background: #fff7ed;
+}
+
+.overdueItem strong {
+  font-size: 14px;
+}
+
+.overdueItem span {
+  color: var(--danger);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.row {
+  display: grid;
+  gap: 8px;
+  width: 100%;
+  padding: 11px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel);
+  text-align: left;
+}
+
+.rowTop {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.row h3 {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.2;
+  letter-spacing: 0;
+}
+
+.row p {
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.25;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+  padding: 3px 7px;
+  border-radius: 6px;
+  background: #e2e8f0;
+  color: #334155;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.chip.due {
+  background: #dcfce7;
+  color: var(--ok);
+}
+
+.chip.warn {
+  background: #fef3c7;
+  color: var(--warn);
+}
+
+.chip.danger {
+  background: #fee2e2;
+  color: var(--danger);
+}
+
+.chip.off {
+  background: #e5e7eb;
+  color: #4b5563;
+}
+
+dialog {
+  width: min(100vw, 720px);
+  max-width: 100vw;
+  height: 100dvh;
+  max-height: 100dvh;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: var(--bg);
+}
+
+dialog::backdrop {
+  background: rgba(15, 23, 42, 0.28);
+}
+
+.detail {
+  min-height: 100%;
+  padding: calc(14px + env(safe-area-inset-top)) 12px calc(20px + env(safe-area-inset-bottom));
+}
+
+.detailHeader {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--line);
+}
+
+#detailOrg {
+  margin-top: 5px;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.closeButton {
+  width: 44px;
+  flex: 0 0 44px;
+}
+
+.actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1.3fr;
+  gap: 8px;
+  margin: 12px 0;
+}
+
+.calendarBox {
+  display: grid;
+  grid-template-columns: 1fr 0.8fr;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.calendarBox button {
+  grid-column: 1 / -1;
+}
+
+.actionButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 10px;
+}
+
+.actionButton.primary {
+  border-color: var(--brand);
+  background: var(--brand);
+  color: var(--brand-ink);
+}
+
+.dangerButton {
+  min-height: 46px;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+  background: #fee2e2;
+  color: #991b1b;
+  font: inherit;
+  font-weight: 900;
+}
+
+.fields {
+  display: grid;
+  gap: 10px;
+}
+
+.activityBox {
+  display: grid;
+  gap: 9px;
+  padding: 10px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #f8fafc;
+}
+
+.activityList {
+  display: grid;
+  gap: 8px;
+}
+
+.activityItem {
+  display: grid;
+  gap: 3px;
+  padding: 8px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel);
+}
+
+.activityItem strong {
+  font-size: 12px;
+  color: var(--brand);
+}
+
+.activityItem p {
+  font-size: 13px;
+  color: var(--ink);
+}
+
+label {
+  display: grid;
+  gap: 5px;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+@media (min-width: 720px) {
+  body {
+    max-width: 720px;
+    margin: 0 auto;
+    border-left: 1px solid var(--line);
+    border-right: 1px solid var(--line);
+  }
+}

@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="it">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="Giro BTL">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="theme-color" content="#f8fafc">
+    <title>Giro visite BTL</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">BTL</p>
+        <h1>Giro visite</h1>
+      </div>
+      <div class="topActions">
+        <button id="newClientBtn" class="iconButton" type="button" aria-label="Nuovo cliente" title="Nuovo cliente">Nuovo</button>
+        <button id="backupBtn" class="iconButton" type="button" aria-label="Backup completo" title="Backup completo">Backup</button>
+        <button id="restoreBtn" class="iconButton" type="button" aria-label="Ripristina backup" title="Ripristina backup">Ripristina</button>
+        <button id="exportBtn" class="iconButton primarySmall" type="button" aria-label="Esporta aggiornamenti" title="Esporta aggiornamenti">Export</button>
+        <input id="restoreFileInput" type="file" accept="application/json,.json" hidden>
+      </div>
+    </header>
+
+    <main>
+      <section class="filters" aria-label="Filtri">
+        <input id="searchInput" type="search" placeholder="Cerca nome, comune, centro" autocomplete="off">
+        <div class="filterGrid">
+          <select id="provinceFilter" aria-label="Provincia">
+            <option value="">Tutte le province</option>
+          </select>
+          <select id="zoneFilter" aria-label="Zona">
+            <option value="">Tutte le zone</option>
+          </select>
+          <select id="cycleFilter" aria-label="Stato ciclo">
+            <option value="">Tutti gli stati</option>
+            <option value="Mai visitato">Mai visitato</option>
+            <option value="Da visitare">Da visitare</option>
+            <option value="Scaduto">Scaduto</option>
+            <option value="In scadenza">In scadenza</option>
+            <option value="Non ancora">Non ancora</option>
+            <option value="Escluso">Escluso</option>
+          </select>
+          <select id="priorityFilter" aria-label="Priorita">
+            <option value="">Tutte le priorita</option>
+            <option value="Alta">Alta</option>
+            <option value="Medio-alta">Medio-alta</option>
+            <option value="Media">Media</option>
+            <option value="Bassa">Bassa</option>
+            <option value="Da valutare">Da valutare</option>
+            <option value="Direzionale">Direzionale</option>
+          </select>
+        </div>
+      </section>
+
+      <section class="stats" aria-label="Riepilogo">
+        <div><strong id="visibleCount">0</strong><span>visibili</span></div>
+        <div><strong id="dueCount">0</strong><span>da fare</span></div>
+        <div><strong id="visitedCount">0</strong><span>visitati</span></div>
+      </section>
+
+      <section class="priorityPanel" aria-label="Fuori frequenza">
+        <div class="sectionTitle">
+          <h2>Fuori frequenza</h2>
+          <select id="topLimitFilter" aria-label="Numero fuori frequenza">
+            <option value="10">Top 10</option>
+            <option value="20">Top 20</option>
+          </select>
+        </div>
+        <div id="overdueList" class="overdueList"></div>
+      </section>
+
+      <section class="priorityPanel" aria-label="Report giornaliero">
+        <div class="sectionTitle">
+          <h2>Report oggi</h2>
+          <button id="dailyReportBtn" class="iconButton" type="button">CSV</button>
+        </div>
+        <div class="filterGrid">
+          <input id="reportDateField" type="date" aria-label="Data report">
+          <input id="baseLocationField" type="text" value="Licata" aria-label="Localita partenza">
+          <input id="dailyKmField" type="number" min="0" step="1" placeholder="Km totali" aria-label="Km totali giornata">
+          <select id="periodTypeField" aria-label="Periodo rimborso">
+            <option value="week">Settimana</option>
+            <option value="month">Mese</option>
+          </select>
+        </div>
+        <button id="periodReportBtn" class="actionButton" type="button">Export rimborsi</button>
+        <div id="dailyReportList" class="overdueList"></div>
+      </section>
+
+      <section id="list" class="list" aria-label="Contatti"></section>
+    </main>
+
+    <dialog id="detailDialog">
+      <form method="dialog" class="detail">
+        <div class="detailHeader">
+          <div>
+            <p id="detailMeta" class="eyebrow"></p>
+            <h2 id="detailName"></h2>
+            <p id="detailOrg"></p>
+          </div>
+          <button class="closeButton" value="close" aria-label="Chiudi">X</button>
+        </div>
+
+        <div class="actions">
+          <a id="callLink" class="actionButton" href="#">Chiama</a>
+          <a id="mapsLink" class="actionButton" href="#" target="_blank" rel="noreferrer">Maps</a>
+          <button id="visitTodayBtn" class="actionButton primary" type="button">Visitato oggi</button>
+        </div>
+        <div class="calendarBox">
+          <label>Data appuntamento calendario
+            <input id="calendarDateField" type="date">
+          </label>
+          <label>Ora
+            <input id="calendarTimeField" type="time" value="09:00">
+          </label>
+          <button id="calendarBtn" class="actionButton" type="button">Crea evento iPhone</button>
+        </div>
+        <div class="calendarBox">
+          <label>Ora ingresso
+            <input id="entryTimeField" type="time">
+          </label>
+          <label>Ora uscita
+            <input id="exitTimeField" type="time">
+          </label>
+          <button id="entryNowBtn" class="actionButton" type="button">Ingresso ora</button>
+          <button id="exitNowBtn" class="actionButton" type="button">Uscita ora</button>
+        </div>
+
+        <div class="fields">
+          <label>Nome
+            <input id="editNameField" type="text">
+          </label>
+          <label>Organizzazione
+            <input id="editOrgField" type="text">
+          </label>
+          <label>Telefono
+            <input id="editPhoneField" type="tel">
+          </label>
+          <label>Email
+            <input id="editEmailField" type="email">
+          </label>
+          <label>Indirizzo
+            <input id="editAddressField" type="text">
+          </label>
+          <label>Comune
+            <input id="editCityField" type="text">
+          </label>
+          <label>Stato record
+            <select id="statusField">
+              <option>Attivo</option>
+              <option>Da verificare</option>
+              <option>Non target</option>
+              <option>Chiuso</option>
+              <option>Non trovato</option>
+              <option>Da correggere</option>
+            </select>
+          </label>
+          <label>Cadenza
+            <select id="cadenceField">
+              <option value="21">21 giorni</option>
+              <option value="28">28 giorni</option>
+              <option value="60">60 giorni</option>
+              <option value="90">90 giorni</option>
+              <option value="14">14 giorni</option>
+              <option value="7">7 giorni</option>
+            </select>
+          </label>
+          <label>Data ultima visita
+            <input id="lastVisitField" type="date">
+          </label>
+          <label>Follow-up speciale
+            <input id="followUpField" type="date">
+          </label>
+          <label>Priorita tua
+            <select id="yourPriorityField">
+              <option value=""></option>
+              <option>Alta</option>
+              <option>Medio-alta</option>
+              <option>Media</option>
+              <option>Bassa</option>
+              <option>Direzionale</option>
+            </select>
+          </label>
+          <label>Esito ultima visita
+            <select id="outcomeField">
+              <option value=""></option>
+              <option>Visitato</option>
+              <option>Non interessato</option>
+              <option>Da richiamare</option>
+              <option>Preventivo</option>
+              <option>Demo</option>
+              <option>Trattativa</option>
+              <option>Cliente</option>
+              <option>Assente</option>
+              <option>Dati errati</option>
+            </select>
+          </label>
+          <label>Prossima azione
+            <input id="nextActionField" type="text" placeholder="Richiamare, inviare proposta, demo">
+          </label>
+          <label>Note rapide
+            <textarea id="notesField" rows="4" placeholder="Appunti visita"></textarea>
+          </label>
+          <div class="activityBox">
+            <div class="sectionTitle">
+              <h2>Attivita</h2>
+            </div>
+            <label>Tipo attivita
+              <select id="activityTypeField">
+                <option>Visita</option>
+                <option>Telefonata</option>
+                <option>WhatsApp</option>
+                <option>Email</option>
+                <option>Preventivo</option>
+                <option>Demo</option>
+                <option>Nota</option>
+              </select>
+            </label>
+            <label>Nuova nota attivita
+              <textarea id="activityTextField" rows="3" placeholder="Es. consegnato catalogo, richiesto preventivo laser, richiamare titolare"></textarea>
+            </label>
+            <button id="addActivityBtn" class="actionButton primary" type="button">Aggiungi attivita</button>
+            <div id="activityList" class="activityList"></div>
+          </div>
+          <button id="deleteContactBtn" class="dangerButton" type="button">Nascondi dal giro</button>
+        </div>
+      </form>
+    </dialog>
+
+    <script src="contacts-data.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
